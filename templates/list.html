@@ -4,7 +4,11 @@
     {% if list %}
         <ul>
             {% for pensioner in list %}
-                <li><a href="/pensioners/{{ pensioner.reference }}/">{{ pensioner.forename }} {{ pensioner.surname }}</a></li>
+                <li>
+                    {{ pensioner.forename }} {{ pensioner.surname }}
+                    <a href="/pensioners/{{ pensioner.reference }}/">Simple</a>
+                    <a href="/pensioners/{{ pensioner.reference }}/detail">ModelForm</a>
+                </li>
             {% endfor %}
         </ul>
     {% else %}

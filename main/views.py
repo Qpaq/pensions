@@ -1,8 +1,10 @@
 # Create your views here.
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.shortcuts import render
-from main.models import Pensioner
+
+from .models import Pensioner
+from .forms import ReadOnlyPensionerModelForm, ReadWritePensionerModelForm
 
 def home(request):
     pensioner = Pensioner.objects.filter(surname="Smith")[0]
@@ -30,3 +32,19 @@ def edit(request, reference):
         return HttpResponseRedirect(reverse('main.views.home'))
 
     return render(request, 'detail_edit.html', {'pensioner': pensioner})
+
+def detail_form(request, reference):
+    pensioner = Pensioner.objects.filter(reference=reference)[0]
+    form = ReadOnlyPensionerModelForm(instance=pensioner)
+    return render(request, 'detail_form.html', {'form': form, 'pensioner': pensioner})
+
+def edit_form(request, reference):
+    pensioner = Pensioner.objects.filter(reference=reference)[0]
+    if request.method == 'POST':
+        form = ReadWritePensionerModelForm(request.POST, instance=pensioner)
+        if form.is_valid(): 			# If not validated then field exception
+            form.save(reference=reference)
+        return HttpResponseRedirect(reverse('main.views.detail_form', args=(pensioner.reference,)))
+    else:
+        form = ReadWritePensionerModelForm(instance=pensioner)
+    return render(request, 'detail_edit_form.html', {'form': form, 'pensioner':pensioner})
