@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+    <form action="{% url "cbv_edit_form" pensioner.reference %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <p> <a href="{% url "index" %}"> All Members</a>
+
+        {% if form.reference %}
+            <a href="{% url "cbv_detail_form" pensioner.reference %}">Cancel</a>
+            <input type="submit" value="Save" />
+        {% else %}
+        <a href="/pensioners/cbv/{{ pensioner.reference }}/edit_form/"> Edit</a>
+            <a href="{% url "cbv_list" %}">Back</a>
+        {% endif %}
+    </p>
+    </form>
+{% endblock content %}
