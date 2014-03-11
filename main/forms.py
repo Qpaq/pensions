@@ -20,8 +20,8 @@ class ReadOnlyPensionerModelForm(BasePensionerModelForm):
 
 class ReadWritePensionerModelForm(BasePensionerModelForm):
 
-    def save(self, reference, commit=True):
-        Pensioner.objects.filter(reference=reference).update(
+    def save(self, commit=True):
+        Pensioner.objects.filter(reference=self.cleaned_data['reference']).update(
             title=self.cleaned_data['title'],
             forename=self.cleaned_data['forename'],
             surname=self.cleaned_data['surname'])
